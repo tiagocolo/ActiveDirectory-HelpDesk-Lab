@@ -1,6 +1,6 @@
-# 📸 Screenshot Walkthrough
+# Screenshot walkthrough
 
-> Each screenshot documents a specific step in building this Active Directory lab, in logical order.
+Each screenshot below documents one step of the lab, in order. Short descriptions explain what's happening and why.
 
 ---
 
@@ -8,11 +8,9 @@
 
 **File:** `01-static-ip-configuration.png`
 
-Setting the Domain Controller's static IP via PowerShell. A DC needs a fixed address — DHCP risks clients losing connectivity after a lease change.
+Setting the DC's static IP via PowerShell: `192.168.50.10/24`, no gateway, DNS `127.0.0.1`.
 
-Configuration: `192.168.50.10/24`, no gateway (isolated network), DNS `127.0.0.1`.
-
-> 💡 `sconfig` wouldn't accept a blank gateway (interprets empty as cancel). PowerShell handles it correctly via `New-NetIPAddress`.
+`sconfig` wouldn't accept a blank gateway field (it treats empty input as cancel). PowerShell's `New-NetIPAddress` handles it fine — you just omit `-DefaultGateway`.
 
 ---
 
@@ -20,7 +18,7 @@ Configuration: `192.168.50.10/24`, no gateway (isolated network), DNS `127.0.0.1
 
 **File:** `02-installing-active-directory.png`
 
-Installing the AD DS role via Server Manager — the foundation for domain, users, and Group Policy.
+Installing the AD DS role from Server Manager. Nothing special here — standard Windows Feature install.
 
 ---
 
@@ -28,7 +26,7 @@ Installing the AD DS role via Server Manager — the foundation for domain, user
 
 **File:** `03-promoted-as-domain-controller.png`
 
-Promoting to DC for forest root `lab.local`. DNS installed alongside AD DS.
+Promoting the server to a Domain Controller for `lab.local`. DNS gets installed alongside AD DS because Active Directory won't work without it.
 
 ---
 
@@ -36,7 +34,7 @@ Promoting to DC for forest root `lab.local`. DNS installed alongside AD DS.
 
 **File:** `04-it-organizational-unit.png`
 
-Created **IT** OU to organize department objects. OUs = organization + GPO scope (not access control).
+Created an OU for IT. OUs organize objects and define GPO scope — they don't control access by themselves.
 
 ---
 
@@ -44,7 +42,7 @@ Created **IT** OU to organize department objects. OUs = organization + GPO scope
 
 **File:** `05-rrhh-organizational-unit.png`
 
-Created **RRHH** OU. Two-OU structure enables per-department policies (like the USB block GPO).
+Same for HR. Two OUs lets me apply different policies (like the USB block GPO) per department.
 
 ---
 
@@ -52,7 +50,7 @@ Created **RRHH** OU. Two-OU structure enables per-department policies (like the 
 
 **File:** `06-users-csv-file.png`
 
-The CSV driving automated user creation. Columns: `Username`, `Name`, `Surname`, `Title`, `Department`, `OU`. Each row = one AD user. This file feeds the PowerShell script.
+The CSV file with employee data: username, name, surname, title, department, OU. This feeds the PowerShell script. Adding a new user means adding a row to this file.
 
 ---
 
@@ -60,7 +58,7 @@ The CSV driving automated user creation. Columns: `Username`, `Name`, `Surname`,
 
 **File:** `07-powershell-user-creation-script.png`
 
-Bulk user provisioning in action. Reads from the CSV, prompts for a temp password once, forces password change on first login. Error handling prevents one failure from stopping the batch.
+The script reading from the CSV and creating users. It asks for a temporary password once (never written to command history), creates each account, and forces a password change on first login. If one user fails, the script logs the error and keeps going.
 
 ---
 
@@ -68,7 +66,7 @@ Bulk user provisioning in action. Reads from the CSV, prompts for a temp passwor
 
 **File:** `08-local-script-execution-permissions.png`
 
-Modified PowerShell execution policy to allow local scripts. By default PowerShell blocks script execution — must be changed to run automation scripts.
+PowerShell blocks local scripts by default. Had to change the execution policy to allow my automation script to run.
 
 ---
 
@@ -76,7 +74,7 @@ Modified PowerShell execution policy to allow local scripts. By default PowerShe
 
 **File:** `09-creating-security-groups.png`
 
-Created `IT-Support` and `RRHH-Team` security groups. Groups grant access; OUs organize. Different concepts, kept independent.
+Created `IT-Support` and `RRHH-Team` groups. Groups control access to resources; OUs organize objects — they solve different problems.
 
 ---
 
@@ -84,7 +82,7 @@ Created `IT-Support` and `RRHH-Team` security groups. Groups grant access; OUs o
 
 **File:** `10-users-added-to-groups.png`
 
-Users assigned to their respective security groups. Membership grants access to resources like `RRHH-Docs`.
+Users assigned to their respective groups. Being in RRHH-Team grants access to the RRHH-Docs folder.
 
 ---
 
@@ -92,7 +90,7 @@ Users assigned to their respective security groups. Membership grants access to 
 
 **File:** `11-dns-configuration.png`
 
-DNS config on the DC. AD DS creates forward lookup zones automatically during promotion. DC points to itself (`127.0.0.1`).
+DNS on the DC. AD DS creates forward lookup zones automatically. The DC points to itself at `127.0.0.1` since there's no upstream DNS on this network.
 
 ---
 
@@ -100,7 +98,7 @@ DNS config on the DC. AD DS creates forward lookup zones automatically during pr
 
 **File:** `12-ntfs-permissions-rrhh-docs.png`
 
-Setting NTFS Modify permissions for RRHH-Team on the `RRHH-Docs` folder. Read, write, edit, delete — but not permission changes or ownership.
+Setting NTFS permissions on the RRHH-Docs folder. RRHH-Team gets Modify — they can read, write, edit, and delete, but can't change permissions or take ownership.
 
 ---
 
@@ -108,9 +106,7 @@ Setting NTFS Modify permissions for RRHH-Team on the `RRHH-Docs` folder. Read, w
 
 **File:** `13-configuring-smb-share.png`
 
-Network share for `RRHH-Docs`. Share = Full Control, NTFS = Modify. The effective permission is the *more restrictive* of the two (NTFS wins).
-
-> 💡 **Defense in depth:** Two independent permission layers. NTFS is the real ceiling.
+Creating the network share. Share permissions = Full Control, NTFS = Modify. NTFS is the real enforcement layer — the effective permission is always the more restrictive of the two.
 
 ---
 
@@ -118,8 +114,8 @@ Network share for `RRHH-Docs`. Share = Full Control, NTFS = Modify. The effectiv
 
 **File:** `14-gpo-usb-storage-block.png`
 
-GPO disabling USB storage on the RRHH OU. Disables the `UsbStor` driver — device detected at hardware level but never assigned a drive letter. Aligned to CIS Control 4.
+GPO that disables USB storage on the RRHH OU. It works by disabling the `UsbStor` driver (registry Start value = 4). The system still detects the device at the hardware level but never assigns a drive letter. Other USB devices (keyboard, mouse) are unaffected. This maps to CIS Control 4.
 
 ---
 
-*Built as part of the [Active Directory Help Desk Lab](../README.md).*
+Back to the [main README](../README.md).
