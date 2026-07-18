@@ -1,0 +1,12 @@
+# users.csv
+# Active Directory Help Desk Lab - Employee Data
+# Usage: Import-Csv .\users.csv | foreach { ... create AD user ... }
+#
+# Columns: Username,Name,Surname,Title,Department,OU
+
+jperez,Juan,Perez,IT Support Technician,IT,OU=IT,DC=lab,DC=local
+mgarcia,Maria,Garcia,Systems Administrator,IT,OU=IT,DC=lab,DC=local
+arodriguez,Ana,Rodriguez,HR Coordinator,RRHH,OU=RRHH,DC=lab,DC=local
+clopez,Carlos,Lopez,HR Assistant,RRHH,OU=RRHH,DC=lab,DC=local
+sgonzalez,Sofia,Gonzalez,HR Manager,RRHH,OU=RRHH,DC=lab,DC=local
+pmartinez,Pablo,Martinez,IT Intern,IT,OU=IT,DC=lab,DC=local

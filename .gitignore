@@ -1,0 +1,31 @@
+# Active Directory Help Desk Lab — .gitignore
+
+# Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+*.lnk
+
+# PowerShell
+*.ps1~
+*.ps1.bak
+[Mm]odules/
+
+# VM files
+*.vdi
+*.vmdk
+*.vbox
+*.vbox-prev
+*.ova
+*.ovf
+
+# Temp
+*.tmp
+*.log
+*.bak
+~$*
+
+# Credentials (should never be committed)
+*.cred
+*.ps1.encrypted
+secrets/
