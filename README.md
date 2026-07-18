@@ -128,17 +128,15 @@ Every step is documented with a screenshot. See [`screenshots/README.md`](./scre
 | 03 | **Promoted as Domain Controller** — New forest root for `lab.local` | ![03](./screenshots/03-promoted-as-domain-controller.png) |
 | 04 | **IT Organizational Unit** — Created OU for IT department structure | ![04](./screenshots/04-it-organizational-unit.png) |
 | 05 | **RRHH Organizational Unit** — Created OU for HR department | ![05](./screenshots/05-rrhh-organizational-unit.png) |
-| 06 | **PowerShell User Creation** — Automated bulk user provisioning script | ![06](./screenshots/06-powershell-user-creation-script.png) |
-| 07 | **Users CSV** — Employee data file driving the automation | ![07](./screenshots/07-users-csv-file.png) |
-| 08 | **Creating Security Groups** — `IT-Support` and `RRHH-Team` groups | ![08](./screenshots/08-creating-security-groups.png) |
-| 09 | **Users Added to Groups** — Membership assignment | ![09](./screenshots/09-users-added-to-groups.png) |
-| 10 | **Network Verification** — Confirming static IP, DNS, connectivity | ![10](./screenshots/10-network-configuration-verification.png) |
+| 06 | **Users CSV** — Employee data file driving the automation | ![06](./screenshots/06-users-csv-file.png) |
+| 07 | **PowerShell User Creation** — Automated bulk user provisioning script | ![07](./screenshots/07-powershell-user-creation-script.png) |
+| 08 | **Script Execution Policy** — Allow local PowerShell scripts | ![08](./screenshots/08-local-script-execution-permissions.png) |
+| 09 | **Creating Security Groups** — `IT-Support` and `RRHH-Team` groups | ![09](./screenshots/09-creating-security-groups.png) |
+| 10 | **Users Added to Groups** — Membership assignment | ![10](./screenshots/10-users-added-to-groups.png) |
 | 11 | **DNS Configuration** — Forward/reverse lookup zones | ![11](./screenshots/11-dns-configuration.png) |
-| 12 | **Project Folder Structure** — Organized project directory on the DC | ![12](./screenshots/12-project-folder-structure.png) |
-| 13 | **Script Execution Policy** — Allow local PowerShell scripts | ![13](./screenshots/13-local-script-execution-permissions.png) |
-| 14 | **NTFS Permissions** — Modify permissions for RRHH-Team on RRHH-Docs | ![14](./screenshots/14-ntfs-permissions-rrhh-docs.png) |
-| 15 | **SMB Share Configuration** — Shared folder with Full Control for RRHH-Team | ![15](./screenshots/15-configuring-smb-share.png) |
-| 16 | **GPO — USB Storage Block** — Policy disabling USB storage on RRHH OUs | ![16](./screenshots/16-gpo-usb-storage-block.png) |
+| 12 | **NTFS Permissions** — Modify permissions for RRHH-Team on RRHH-Docs | ![12](./screenshots/12-ntfs-permissions-rrhh-docs.png) |
+| 13 | **SMB Share Configuration** — Shared folder with Full Control for RRHH-Team | ![13](./screenshots/13-configuring-smb-share.png) |
+| 14 | **GPO — USB Storage Block** — Policy disabling USB storage on RRHH OUs | ![14](./screenshots/14-gpo-usb-storage-block.png) |
 
 ---
 
@@ -264,7 +262,7 @@ ActiveDirectory-HelpDesk-Lab/
 ├── README.md                          ← You are here
 ├── screenshots/
 │   ├── README.md                      ← Screenshot descriptions
-│   └── 01-16-*.png                    ← Step screenshots
+│   └── 01-14-*.png                    ← Step screenshots
 ├── network-diagrams/
 │   ├── network-topology-overview.png
 │   └── network-adapter-configuration.png
