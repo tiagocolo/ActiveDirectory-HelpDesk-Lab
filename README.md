@@ -1,12 +1,12 @@
 # Active Directory Help Desk Lab
 
-A hands-on AD lab I built from scratch to practice real IT Support / Help Desk workflows — domain setup, automated user onboarding, access control, GPO hardening, and one very memorable incident where I accidentally deleted my own admin account.
+A hands-on AD lab I built from scratch to practice real IT Support / Help Desk workflows — domain setup, automated user onboarding, access control, and GPO hardening.
 
 ---
 
 ## Why I built this
 
-I wanted something more solid than "I followed a YouTube tutorial" for my portfolio. So I set up a small company scenario (2 departments, 6 users) and documented everything — including the mistakes. The README you're reading IS the documentation I wrote as I went, not something I polished after the fact.
+I wanted something more solid than "I followed a YouTube tutorial" for my portfolio. So I set up a small company scenario (2 departments, 6 users) and documented every step.
 
 **What this covers:**
 - AD DS deployment and configuration
@@ -15,8 +15,7 @@ I wanted something more solid than "I followed a YouTube tutorial" for my portfo
 - NTFS vs Share permissions (defense in depth)
 - Static IP / DNS for Domain Controllers
 - GPO for USB storage restriction
-- Incident response (yes, I broke things)
-- All mapped to CIS Controls v8
+- Mapped to CIS Controls v8
 
 ---
 
@@ -53,13 +52,11 @@ Each step has a screenshot in [`screenshots/`](./screenshots/) with a short expl
 | 13 | **SMB share** — Network share with access controls |
 | 14 | **GPO USB block** — Policy disabling storage on RRHH OU |
 
-Screenshots in order: [`screenshots/README.md`](./screenshots/README.md)
-
 ---
 
 ## Security notes (CIS Controls)
 
-I mapped this to CIS Controls v8 to make it relevant for real jobs:
+This project maps to CIS Controls v8:
 
 **CIS 4 — Secure Configuration:** GPO that disables USB storage on the RRHH OU. It targets the `UsbStor` driver (Start = 4), so Windows detects the device but never mounts it. Keyboards and mice still work — this is specifically about storage.
 
@@ -67,29 +64,11 @@ I mapped this to CIS Controls v8 to make it relevant for real jobs:
 - NTFS: RRHH-Team gets Modify (read/write/edit, but no permission changes)
 - Share (SMB): RRHH-Team gets Full Control
 
-The effective permission is whichever is more restrictive (NTFS). This is intentional — you set the real ceiling at NTFS level and leave the share wide open.
-
-**CIS 8 — Incident Response:** See below.
+The effective permission is whichever is more restrictive (NTFS). The real ceiling is set at the NTFS level.
 
 ---
 
-## The incident (I deleted my own admin account)
-
-While cleaning up test users, I ran a filter to find users with a `Title` field set. My own domain account also had a Title. The delete command removed me — while I was logged in.
-
-**What happened:** The active session stayed alive (Windows doesn't re-check on every command), but `Get-ADUser` could no longer find my account. The built-in Administrator was still there because it can't be removed from Domain Admins.
-
-**How I fixed it:** Logged in as Administrator, recreated my account, re-added it to Domain Admins, and tested before closing the session.
-
-**Lesson learned:** Never run a bulk delete with a broad filter. Use an explicit allow-list or at minimum run `-WhatIf` first. I got lucky because the built-in Administrator was available — in a real environment this could have been a very bad day.
-
-I wrote the full timeline in the [screenshots README](./screenshots/README.md#-incident-report-accidental-loss-of-domain-admin-access) because it's worth remembering.
-
----
-
-## What's missing (roadmap)
-
-The VM broke before I could finish the last items:
+## Roadmap
 
 - [x] Domain + DNS
 - [x] OUs for IT and RRHH
@@ -97,12 +76,11 @@ The VM broke before I could finish the last items:
 - [x] Security groups
 - [x] NTFS + Share permissions
 - [x] GPO USB block
-- [x] Incident documented
-- [ ] Join a Windows client to the domain (was next)
+- [ ] Join a Windows client to the domain
 - [ ] Simulate help desk tickets (account lockout, transfer, offboarding)
 - [ ] Track those in Jira for the full workflow
 
-The core is done. The rest is polish.
+The core is done.
 
 ---
 
@@ -132,8 +110,7 @@ ActiveDirectory-HelpDesk-Lab/
 ├── README.md
 ├── screenshots/         <- Step-by-step screenshots with descriptions
 ├── network-diagrams/    <- Network topology visuals
-├── scripts/             <- PowerShell + CSV for user provisioning
-└── .gitignore
+└── scripts/             <- PowerShell + CSV for user provisioning
 ```
 
 ---
@@ -142,6 +119,4 @@ ActiveDirectory-HelpDesk-Lab/
 
 **Tiago Colo Ceppone**  
 colotiago8@gmail.com  
-[linkedin.com/in/tiago-colo-640057402](https://www.linkedin.com/in/tiago-colo-640057402/)  
-
-Built for learning, not for show. If something's wrong or could be better, I'd genuinely like to know.
+[linkedin.com/in/tiago-colo-640057402](https://www.linkedin.com/in/tiago-colo-640057402/)
